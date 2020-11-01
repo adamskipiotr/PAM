@@ -6,6 +6,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.pam.api.StudentApi
+import com.example.pam.dto.StudentDTO
+import retrofit2.Callback
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,7 +29,32 @@ class LoginActivity : AppCompatActivity() {
         dbHandler = DatabaseHelper(this)
 
         loginButton.setOnClickListener {
-            val loginUserResult = dbHandler.getUser(login = usernameInput.text.toString(),password = passwordInput.text.toString() )
+            var loginUserResult:Boolean = false
+            val builder = Retrofit.Builder()
+            builder.baseUrl("http://IP-KOMPUTERA-UZUPELNIC:8080/")
+            builder.addConverterFactory(GsonConverterFactory.create())
+            val retrofit :Retrofit
+            retrofit = builder.build()
+            val studentApi:StudentApi
+            studentApi = retrofit.create(StudentApi::class.java)
+            val testStudent : StudentDTO = StudentDTO(usernameInput.text.toString(),passwordInput.text.toString())
+
+            val call: Call<StudentDTO> = studentApi.loginStudent(testStudent)
+                call.enqueue(object: Callback<StudentDTO>{
+
+                    override fun onFailure(call: Call<StudentDTO>, t: Throwable) {
+                        Toast.makeText(applicationContext, "ERROR", Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onResponse(call: Call<StudentDTO>, response: Response<StudentDTO>) {
+                        Toast.makeText(applicationContext, "TEA", Toast.LENGTH_LONG).show()
+                         loginUserResult = true
+                    }
+
+                })
+            val intent = Intent(this, User::class.java).apply {};
+            startActivity(intent)
+
 
             if(!loginUserResult){
                 Toast.makeText(this, "Błąd logowania", Toast.LENGTH_LONG).show()
@@ -30,8 +62,7 @@ class LoginActivity : AppCompatActivity() {
 
             if(loginUserResult){
                 Toast.makeText(this, "OK", Toast.LENGTH_LONG).show()
-                val intent = Intent(this, User::class.java).apply {};
-                startActivity(intent)
+
             }
         }
     }

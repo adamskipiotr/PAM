@@ -35,7 +35,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, dbName, facto
 
     fun getUser(login: String, password: String): Boolean {
         val db = writableDatabase
-        //val query2 =");
         val query = "select * from user where login = '$login' and password = '$password'"
         val cursor = db.rawQuery(query,null)
         if (cursor.count <= 0) {

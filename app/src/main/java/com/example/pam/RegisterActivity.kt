@@ -5,6 +5,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.pam.api.StudentApi
+import com.example.pam.dto.StudentDTO
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -18,19 +25,35 @@ class RegisterActivity : AppCompatActivity() {
         val usernameInput = findViewById<TextView>(R.id.registerUsernameInput)
         val passwordInput = findViewById<TextView>(R.id.registerPasswordInput)
         val passwordRepeatInput = findViewById<TextView>(R.id.registerPasswordRepeatInput)
-        var username =  usernameInput.text.toString()
+        val username =  usernameInput.text.toString()
 
         dbHandler = DatabaseHelper(this)
 
         registerButton.setOnClickListener {
-            if (passwordInput != passwordRepeatInput) {
+          /*  if (passwordInput != passwordRepeatInput) {
                 Toast.makeText(this, "Hasła nie są identyczne", Toast.LENGTH_SHORT).show()
-            }
-            val insertUserResult = dbHandler.insertUserData(login = usernameInput.text.toString(),password = passwordInput.text.toString() )
+            } */
 
-            if(insertUserResult){
-                Toast.makeText(this, "Użytkownik $username został zapisany", Toast.LENGTH_LONG).show()
-            }
+            val builder = Retrofit.Builder()
+            builder.baseUrl("http://IP-KOMPUTERA-UZUPELNIC:8080/")
+            builder.addConverterFactory(GsonConverterFactory.create())
+            val retrofit : Retrofit
+            retrofit = builder.build()
+            val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
+            val newStudent = StudentDTO(usernameInput.text.toString(),passwordInput.text.toString())
+
+            val call: Call<StudentDTO> = studentApi.createStudent(newStudent)
+            call.enqueue(object: Callback<StudentDTO> {
+
+                override fun onFailure(call: Call<StudentDTO>, t: Throwable) {
+                    Toast.makeText(applicationContext, "ERROR", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onResponse(call: Call<StudentDTO>, response: Response<StudentDTO>) {
+                    Toast.makeText(applicationContext, "YEA", Toast.LENGTH_LONG).show()
+                }
+
+            })
         }
     }
 }

@@ -13,9 +13,6 @@ class UserMessages : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_messages)
 
-        val context = this
-
-        // list to populate list view
         val list = mutableListOf(
             "Golden yellow",
             "Han purple",
@@ -25,7 +22,7 @@ class UserMessages : AppCompatActivity() {
 
         // initialize an array adapter
         val adapter:ArrayAdapter<String> = ArrayAdapter<String>(
-            context,
+            this,
             android.R.layout.simple_dropdown_item_1line,
             list
         )
@@ -42,8 +39,6 @@ class UserMessages : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         }
 
-
-
         // another list to populate second list view
         val list2 = mutableListOf(
             "Android green",
@@ -54,12 +49,12 @@ class UserMessages : AppCompatActivity() {
 
         // initialize another array adapter
         val adapter2:ArrayAdapter<String> = ArrayAdapter<String>(
-            context,
+            this,
             android.R.layout.simple_dropdown_item_1line,
             list2
         )
 
-        var listView2 = findViewById<ListView>(R.id.listView2)
+        val listView2 = findViewById<ListView>(R.id.listView2)
         // attach the array adapter with second list view
         listView2.adapter = adapter2
 
@@ -71,7 +66,7 @@ class UserMessages : AppCompatActivity() {
             val clickedItem = parent.getItemAtPosition(position).toString()
 
             // show an alert dialog to confirm
-            MaterialAlertDialogBuilder(context).apply {
+            MaterialAlertDialogBuilder(this).apply {
                 setTitle("Item: $clickedItem")
                 setMessage("Are you want to delete it from list view?")
                 setPositiveButton("Delete"){_,_->
