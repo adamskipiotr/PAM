@@ -5,77 +5,77 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
+import com.example.pam.api.StudentApi
+import com.example.pam.dto.MessageDTO
+import com.example.pam.dto.StudentDTO
+import com.example.pam.dto.StudentsGroupDTO
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class UserMessages : AppCompatActivity() {
+
+    var messagesToRead: List<MessageDTO>? = null
+    val context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_messages)
 
-        val list = mutableListOf(
-            "Golden yellow",
-            "Han purple",
-            "Hansa yellow",
-            "Jazzberry jam"
-        )
+        val builder = Retrofit.Builder()
+        builder.baseUrl("http://IP_KOMPUTERA:8080/")
+        builder.addConverterFactory(GsonConverterFactory.create())
+        val retrofit: Retrofit
+        retrofit = builder.build()
+        val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
+        val studentTemp = StudentDTO(1L, "Android", "Haslo")
+        val call: Call<List<MessageDTO>> = studentApi.getAllMessagesForStudent(studentTemp)
+        call.enqueue(object : Callback<List<MessageDTO>> {
 
-        // initialize an array adapter
-        val adapter:ArrayAdapter<String> = ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            list
-        )
-        val listViewItem = findViewById<ListView>(R.id.listView)
-        // attach the array adapter with list view
-        listViewItem.adapter = adapter
+            override fun onFailure(call: Call<List<MessageDTO>>, t: Throwable) {
+                Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+            }
 
-        // list view item click listener
-        listViewItem.onItemClickListener = AdapterView.OnItemClickListener {
-                parent, view, position, id ->
-
-            // remove clicked item from list view
-            list.removeAt(position)
-            adapter.notifyDataSetChanged()
-        }
-
-        // another list to populate second list view
-        val list2 = mutableListOf(
-            "Android green",
-            "Antique brass",
-            "Antique white",
-            "Avocado"
-        )
-
-        // initialize another array adapter
-        val adapter2:ArrayAdapter<String> = ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            list2
-        )
-
-        val listView2 = findViewById<ListView>(R.id.listView2)
-        // attach the array adapter with second list view
-        listView2.adapter = adapter2
-
-
-        // second list view item click listener
-        listView2.onItemClickListener = AdapterView.OnItemClickListener {
-                parent, view, position, id ->
-
-            val clickedItem = parent.getItemAtPosition(position).toString()
-
-            // show an alert dialog to confirm
-            MaterialAlertDialogBuilder(this).apply {
-                setTitle("Item: $clickedItem")
-                setMessage("Are you want to delete it from list view?")
-                setPositiveButton("Delete"){_,_->
-                    // remove clicked item from second list view
-                    list2.removeAt(position)
-                    adapter2.notifyDataSetChanged()
+            override fun onResponse(
+                call: Call<List<MessageDTO>>,
+                response: Response<List<MessageDTO>>
+            ) {
+                Toast.makeText(applicationContext, "YEA", Toast.LENGTH_LONG).show()
+                val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
+                messagesToRead = response.body()
+                messagesToRead?.forEach {
+                    messagesToShow += it.toString()
                 }
-                setNeutralButton("Cancel"){_,_->}
-            }.create().show()
-        }
+
+                val adapter: ArrayAdapter<String> = ArrayAdapter(
+                    context,
+                    android.R.layout.simple_dropdown_item_1line,
+                    messagesToShow
+                )
+                val listViewItem = findViewById<ListView>(R.id.listView)
+                listViewItem.adapter = adapter
+
+                listViewItem.onItemClickListener =
+                    AdapterView.OnItemClickListener { parent, view, position, id ->
+
+                        val clickedItem = parent.getItemAtPosition(position).toString()
+
+                        MaterialAlertDialogBuilder(context).apply {
+                            setTitle("Item: $clickedItem")
+                            setMessage("Usunąć tę wiadomość?")
+                            setPositiveButton("Usuń") { _, _ ->
+                                messagesToShow.removeAt(position)
+                                adapter.notifyDataSetChanged()
+                            }
+                            setNeutralButton("Anuluj") { _, _ -> }
+                        }.create().show()
+                    }
+            }
+        })
     }
 }

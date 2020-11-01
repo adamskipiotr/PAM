@@ -2,10 +2,12 @@ package com.example.pam.dto
 
 
 class StudentDTO {
-    var username: String? = null
-    var password: String? = null
+    private var studentID: Long? = null
+    private var username: String? = null
+    private var password: String? = null
 
-    constructor(username: String,password: String) {
+    constructor(studentID: Long, username: String, password: String) {
+        this.studentID = studentID
         this.username = username
         this.password = password
     }

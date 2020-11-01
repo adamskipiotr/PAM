@@ -33,14 +33,13 @@ class RegisterActivity : AppCompatActivity() {
           /*  if (passwordInput != passwordRepeatInput) {
                 Toast.makeText(this, "Hasła nie są identyczne", Toast.LENGTH_SHORT).show()
             } */
-
             val builder = Retrofit.Builder()
-            builder.baseUrl("http://IP-KOMPUTERA-UZUPELNIC:8080/")
+            builder.baseUrl("http://IP_KOMPUTERA:8080/")
             builder.addConverterFactory(GsonConverterFactory.create())
             val retrofit : Retrofit
             retrofit = builder.build()
             val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-            val newStudent = StudentDTO(usernameInput.text.toString(),passwordInput.text.toString())
+            val newStudent = StudentDTO(1L,usernameInput.text.toString(),passwordInput.text.toString())
 
             val call: Call<StudentDTO> = studentApi.createStudent(newStudent)
             call.enqueue(object: Callback<StudentDTO> {
@@ -52,7 +51,6 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<StudentDTO>, response: Response<StudentDTO>) {
                     Toast.makeText(applicationContext, "YEA", Toast.LENGTH_LONG).show()
                 }
-
             })
         }
     }

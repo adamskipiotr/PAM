@@ -10,4 +10,8 @@ class MessageDTO {
     }
 
     constructor()
+
+    override fun toString(): String {
+        return "$contents"
+    }
 }

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 
+
+//NIE UŻYWANE OBECNIE
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, dbName, factory, version) {
 
     companion object {
