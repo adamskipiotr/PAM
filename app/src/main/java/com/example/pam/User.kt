@@ -25,6 +25,7 @@ class User : AppCompatActivity() {
     lateinit var spinner: Spinner
     lateinit var checkMessagesButton: Button
     lateinit var messageTextField: EditText
+    lateinit var titleTextField: EditText
     lateinit var sendMessageButton: Button
     val context: Context = this
     var studentsGroupsList: List<StudentsGroupDTO>? = null
@@ -36,7 +37,7 @@ class User : AppCompatActivity() {
         mapViewsToReferences();
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://IP_KOMPUTERA:8080/")
+        builder.baseUrl("http://192.168.0.213:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
@@ -77,7 +78,7 @@ class User : AppCompatActivity() {
                    idGroupToInform = it.groupID!!
                }
             }
-            val messageDTO:MessageDTO= MessageDTO(idGroupToInform!!, messageTextField.text.toString())
+            val messageDTO = MessageDTO(idGroupToInform!!, messageTextField.text.toString(),titleTextField.text.toString(),"Autor testowy")
             val callSendMessage: Call<Void> = teacherApi.sendNewMessage(messageDTO)
             callSendMessage.enqueue(object : Callback<Void> {
 
@@ -114,11 +115,12 @@ class User : AppCompatActivity() {
 
 
     private fun mapViewsToReferences() {
-        notificationsText = findViewById<TextView>(R.id.notificationsCounterText)
-        notificationsBox = findViewById<CardView>(R.id.notificationsCardView)
-        spinner = findViewById<Spinner>(R.id.spinnerRecieverGroup)
-        checkMessagesButton = findViewById<Button>(R.id.recievedMessagesButton)
-        messageTextField = findViewById<EditText>(R.id.messageFieldInput)
-        sendMessageButton = findViewById<Button>(R.id.sendMessageButton)
+        notificationsText = findViewById(R.id.notificationsCounterText)
+        notificationsBox = findViewById(R.id.notificationsCardView)
+        spinner = findViewById(R.id.spinnerRecieverGroup)
+        checkMessagesButton = findViewById(R.id.recievedMessagesButton)
+        messageTextField = findViewById(R.id.messageFieldInput)
+        sendMessageButton = findViewById(R.id.sendMessageButton)
+        titleTextField = findViewById(R.id.messageTileTextView)
     }
 }

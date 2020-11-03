@@ -1,12 +1,16 @@
 package com.example.pam.dto
 
 class MessageDTO {
-     var groupID:Long? = null
-     var contents:String? = null
+    var groupID: Long? = null
+    var title: String? = null
+    var author: String? = null
+    var contents: String? = null
 
-    constructor(groupID: Long,contents:String) {
+    constructor(groupID: Long, contents: String, title: String, author: String) {
         this.groupID = groupID
         this.contents = contents
+        this.title = title
+        this.author = author
     }
 
     constructor()
