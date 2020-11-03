@@ -6,6 +6,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import com.example.pam.adapters.MessageAdapter
 import com.example.pam.api.StudentApi
 import com.example.pam.dto.MessageDTO
 import com.example.pam.dto.StudentDTO
@@ -17,10 +18,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class UserMessages : AppCompatActivity() {
 
+    var arrayListMessage: ArrayList<MessageDTO>? = null
     var messagesToRead: List<MessageDTO>? = null
     val context = this
 
@@ -29,7 +32,7 @@ class UserMessages : AppCompatActivity() {
         setContentView(R.layout.activity_user_messages)
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://IP_KOMPUTERA:8080/")
+        builder.baseUrl("http://IP-KOMPUTERA:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
@@ -48,9 +51,11 @@ class UserMessages : AppCompatActivity() {
             ) {
                 Toast.makeText(applicationContext, "YEA", Toast.LENGTH_LONG).show()
                 val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
-                messagesToRead = response.body()
+                arrayListMessage = ArrayList()
+                messagesToRead =  response.body()
                 messagesToRead?.forEach {
                     messagesToShow += it.toString()
+                    arrayListMessage!!.add(it)
                 }
 
                 val adapter: ArrayAdapter<String> = ArrayAdapter(
@@ -59,7 +64,8 @@ class UserMessages : AppCompatActivity() {
                     messagesToShow
                 )
                 val listViewItem = findViewById<ListView>(R.id.listView)
-                listViewItem.adapter = adapter
+                val adapterCustom = MessageAdapter(context, arrayListMessage!!)
+                listViewItem.adapter = adapterCustom
 
                 listViewItem.onItemClickListener =
                     AdapterView.OnItemClickListener { parent, view, position, id ->

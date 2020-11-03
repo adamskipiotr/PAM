@@ -34,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Hasła nie są identyczne", Toast.LENGTH_SHORT).show()
             } */
             val builder = Retrofit.Builder()
-            builder.baseUrl("http://IP_KOMPUTERA:8080/")
+            builder.baseUrl("http://IP-KOMPUTERA:8080/")
             builder.addConverterFactory(GsonConverterFactory.create())
             val retrofit : Retrofit
             retrofit = builder.build()
