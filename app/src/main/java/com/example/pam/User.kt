@@ -25,7 +25,7 @@ class User : AppCompatActivity() {
     lateinit var spinner: Spinner
     lateinit var checkMessagesButton: Button
     lateinit var messageTextField: EditText
-    lateinit var titleTextField: TextView
+    lateinit var titleTextField: EditText
     lateinit var sendMessageButton: Button
     val context: Context = this
     var studentsGroupsList: List<StudentsGroupDTO>? = null
@@ -37,7 +37,7 @@ class User : AppCompatActivity() {
         mapViewsToReferences();
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://IP-KOMPUTERA:8080/")
+        builder.baseUrl("http://192.168.0.213:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()

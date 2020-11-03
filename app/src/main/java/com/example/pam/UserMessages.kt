@@ -32,7 +32,7 @@ class UserMessages : AppCompatActivity() {
         setContentView(R.layout.activity_user_messages)
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://IP-KOMPUTERA:8080/")
+        builder.baseUrl("http://192.168.0.213:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
@@ -52,7 +52,7 @@ class UserMessages : AppCompatActivity() {
                 Toast.makeText(applicationContext, "YEA", Toast.LENGTH_LONG).show()
                 val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
                 arrayListMessage = ArrayList()
-                messagesToRead =  response.body()
+                messagesToRead = response.body()
                 messagesToRead?.forEach {
                     messagesToShow += it.toString()
                     arrayListMessage!!.add(it)

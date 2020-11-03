@@ -25,24 +25,25 @@ class RegisterActivity : AppCompatActivity() {
         val usernameInput = findViewById<TextView>(R.id.registerUsernameInput)
         val passwordInput = findViewById<TextView>(R.id.registerPasswordInput)
         val passwordRepeatInput = findViewById<TextView>(R.id.registerPasswordRepeatInput)
-        val username =  usernameInput.text.toString()
+        val username = usernameInput.text.toString()
 
         dbHandler = DatabaseHelper(this)
 
         registerButton.setOnClickListener {
-          /*  if (passwordInput != passwordRepeatInput) {
-                Toast.makeText(this, "Hasła nie są identyczne", Toast.LENGTH_SHORT).show()
-            } */
+            /*  if (passwordInput != passwordRepeatInput) {
+                  Toast.makeText(this, "Hasła nie są identyczne", Toast.LENGTH_SHORT).show()
+              } */
             val builder = Retrofit.Builder()
-            builder.baseUrl("http://IP-KOMPUTERA:8080/")
+            builder.baseUrl("http://192.168.0.213:8080/")
             builder.addConverterFactory(GsonConverterFactory.create())
-            val retrofit : Retrofit
+            val retrofit: Retrofit
             retrofit = builder.build()
             val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-            val newStudent = StudentDTO(1L,usernameInput.text.toString(),passwordInput.text.toString())
+            val newStudent =
+                StudentDTO(1L, usernameInput.text.toString(), passwordInput.text.toString())
 
             val call: Call<StudentDTO> = studentApi.createStudent(newStudent)
-            call.enqueue(object: Callback<StudentDTO> {
+            call.enqueue(object : Callback<StudentDTO> {
 
                 override fun onFailure(call: Call<StudentDTO>, t: Throwable) {
                     Toast.makeText(applicationContext, "ERROR", Toast.LENGTH_LONG).show()

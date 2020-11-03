@@ -28,22 +28,15 @@ class MessageAdapter(context:Context, private val dataSource: ArrayList<MessageD
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        // Get view for row item
         val rowView = inflater.inflate(R.layout.list_item_recipe, parent, false)
 
-        // Get title element
         val titleTextView = rowView.findViewById(R.id.recipe_list_title) as TextView
 
-        // Get subtitle element
         val detailsTextView = rowView.findViewById(R.id.recipe_list_subtitle) as TextView
 
-        // Get detail element
         val authorTextView = rowView.findViewById(R.id.recipe_list_detail) as TextView
-
-        // 1
         val message = getItem(position) as MessageDTO
 
-// 2
         titleTextView.text = message.title
         detailsTextView.text = message.contents
         authorTextView.text = message.author
