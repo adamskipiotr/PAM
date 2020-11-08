@@ -21,7 +21,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class UserMessages : AppCompatActivity() {
+class StudentMessages : AppCompatActivity() {
 
     var arrayListMessage: ArrayList<MessageDTO>? = null
     var messagesToRead: List<MessageDTO>? = null
@@ -29,15 +29,15 @@ class UserMessages : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_messages)
+        setContentView(R.layout.activity_student_messages)
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://192.168.0.213:8080/")
+        builder.baseUrl("http://IP-KOMPUTERA:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
         val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-        val studentTemp = StudentDTO(1L, "Android", "Haslo")
+        val studentTemp = StudentDTO(4L, "Android", "Haslo")
         val call: Call<List<MessageDTO>> = studentApi.getAllMessagesForStudent(studentTemp)
         call.enqueue(object : Callback<List<MessageDTO>> {
 
@@ -49,7 +49,7 @@ class UserMessages : AppCompatActivity() {
                 call: Call<List<MessageDTO>>,
                 response: Response<List<MessageDTO>>
             ) {
-                Toast.makeText(applicationContext, "YEA", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Sukces", Toast.LENGTH_LONG).show()
                 val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
                 arrayListMessage = ArrayList()
                 messagesToRead = response.body()
@@ -74,9 +74,24 @@ class UserMessages : AppCompatActivity() {
 
                         MaterialAlertDialogBuilder(context).apply {
                             setTitle("Item: $clickedItem")
-                            setMessage("Usunąć tę wiadomość?")
-                            setPositiveButton("Usuń") { _, _ ->
+                            setMessage("Oznaczyć jako przeczytaną?")
+                            setPositiveButton("Potwierdź") { _, _ ->
+                                val messageToDelete = messagesToRead!!.elementAt(position)
+                                val call: Call<Void> = studentApi.markMessageAsSeen("Android",messageToDelete)
+                                call.enqueue(object : Callback<Void> {
+
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                                        Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+                                    }
+
+                                    override fun onResponse(  call: Call<Void>,
+                                                              response: Response<Void>) {
+                                        Toast.makeText(applicationContext, "Oznaczono jako przeczytana", Toast.LENGTH_LONG).show()
+
+                                    }
+                                })
                                 messagesToShow.removeAt(position)
+                                //TODO tu powinno sie usuwac
                                 adapter.notifyDataSetChanged()
                             }
                             setNeutralButton("Anuluj") { _, _ -> }

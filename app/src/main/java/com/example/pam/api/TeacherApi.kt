@@ -19,4 +19,7 @@ interface TeacherApi {
 
     @POST("teacher/login")
     fun loginTeacher(@Body teacherDTO: TeacherDTO):Call<Boolean>
+
+    @POST("teacher/add")
+    fun createTeacher(@Body teacherDTO:  TeacherDTO): Call<TeacherDTO>
 }

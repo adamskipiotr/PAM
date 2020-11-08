@@ -4,6 +4,7 @@ class MessageDTO {
     var groupID: Long? = null
     var title: String? = null
     var author: String? = null
+    var seenByUser: Boolean? = null
     var contents: String? = null
 
     constructor(groupID: Long, contents: String, title: String, author: String) {

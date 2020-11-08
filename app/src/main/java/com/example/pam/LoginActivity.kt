@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             var loginUserResult: Boolean
             val builder = Retrofit.Builder()
-            builder.baseUrl("http://192.168.0.213:8080/")
+            builder.baseUrl("http://IP-KOMPUTERA:8080/")
             builder.addConverterFactory(GsonConverterFactory.create())
             val retrofit: Retrofit
             retrofit = builder.build()
@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                     val serverLoginStatus: String = response.body()!!.toString()
                     loginUserResult = serverLoginStatus.toBoolean()
                     if (loginUserResult) {
-                        val intent = Intent(context, UserMessages::class.java).apply {};
+                        val intent = Intent(context, StudentActivity::class.java).apply {};
                         startActivity(intent)
                     } else {
                         Toast.makeText(applicationContext, "Błąd logowania", Toast.LENGTH_LONG)
@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
     private fun loginTeacher(usernameInput: String, passwordInput: String) {
         var loginUserResult: Boolean
         val builder = Retrofit.Builder()
-        builder.baseUrl("http:/192.168.0.213:8080/")
+        builder.baseUrl("http:/IP-KOMPUTERA:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
@@ -88,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
                 val serverLoginStatus: String = response.body()!!.toString()
                 loginUserResult = serverLoginStatus.toBoolean()
                 if (loginUserResult) {
-                    val intent = Intent(context, User::class.java).apply {};
+                    val intent = Intent(context, TeacherActivity::class.java).apply {};
                     startActivity(intent)
                 } else {
                     Toast.makeText(applicationContext, "Błąd logowania", Toast.LENGTH_LONG)
