@@ -28,7 +28,7 @@ class JoinStudentsGroupActivity : AppCompatActivity() {
         spinner = findViewById(R.id.spinnerStudentsGroupToJoin)
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://IP-KOMPUTERA:8080/")
+        builder.baseUrl("http://192.168.0.213:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
