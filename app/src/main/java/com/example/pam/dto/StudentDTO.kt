@@ -20,7 +20,7 @@ class StudentDTO {
         return password!!
     }
 
-    fun getstudentID(): Long {
+    fun getStudentID(): Long {
         return studentID!!
     }
 

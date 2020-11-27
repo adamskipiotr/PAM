@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                     loginUserResult = serverLoginStatus.getResult()
 
                     if (loginUserResult) {
-                        sp.edit().putLong("ID",serverLoginStatus.getActiveStudent().getstudentID()).apply()
+                        sp.edit().putLong("ID",serverLoginStatus.getActiveStudent().getStudentID()).apply()
                         sp.edit().putString("username",serverLoginStatus.getActiveStudent().getUsername()).apply()
                         sp.edit().putString("password",serverLoginStatus.getActiveStudent().getPassword()).apply()
                         val intent = Intent(context, StudentActivity::class.java).apply {};
@@ -96,9 +96,10 @@ class LoginActivity : AppCompatActivity() {
                 val serverLoginStatus: TeacherLoginResponse = response.body()!!
                 loginUserResult = serverLoginStatus.getResult()
                 if (loginUserResult) {
-                    val ooo = serverLoginStatus.getActiveTeacher().getUsername()
                     sp.edit().putString("username",serverLoginStatus.getActiveTeacher().getUsername()).apply()
-                    val aaaa = sp.getString("username","EMPTY")
+                    sp.edit().putLong("ID",serverLoginStatus.getActiveTeacher().getTeacherID()).apply()
+                    sp.edit().putString("username",serverLoginStatus.getActiveTeacher().getUsername()).apply()
+                    sp.edit().putString("password",serverLoginStatus.getActiveTeacher().getPassword()).apply()
                     val intent = Intent(context, TeacherActivity::class.java).apply {};
                     startActivity(intent)
                 } else {

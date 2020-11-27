@@ -2,8 +2,9 @@ package com.example.pam.dto
 
 class TeacherDTO {
 
-     private var username: String? = null
-     private var password: String? = null
+    private var teacherID: Long? = null
+    private var username: String? = null
+    private var password: String? = null
 
 
     constructor(username: String, password: String) {
@@ -18,5 +19,10 @@ class TeacherDTO {
     fun getPassword(): String {
         return password!!
     }
+
+    fun getTeacherID(): Long {
+        return teacherID!!
+    }
+
     constructor()
 }
