@@ -17,4 +17,8 @@ class StudentLoginResponse {
     fun  getResult():Boolean{
         return this.result!!
     }
+
+    fun getActiveStudent():StudentDTO{
+        return this.activeStudent!!
+    }
 }

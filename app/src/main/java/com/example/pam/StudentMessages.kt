@@ -1,5 +1,6 @@
 package com.example.pam
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.AdapterView
@@ -30,6 +31,7 @@ class StudentMessages : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student_messages)
+        val  sp: SharedPreferences = getSharedPreferences("login",MODE_PRIVATE)
 
         val builder = Retrofit.Builder()
         builder.baseUrl("http://192.168.0.213:8080/")
@@ -37,7 +39,10 @@ class StudentMessages : AppCompatActivity() {
         val retrofit: Retrofit
         retrofit = builder.build()
         val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-        val studentTemp = StudentDTO(4L, "Android", "Haslo")
+        val ID = sp.getLong("ID",-1)
+        val username =  sp.getString("username","EMPTY")
+        val password = sp.getString("password","EMPTY")
+        val studentTemp = StudentDTO(ID, username!!, password!!)
         val call: Call<List<MessageDTO>> = studentApi.getAllMessagesForStudent(studentTemp)
         call.enqueue(object : Callback<List<MessageDTO>> {
 
