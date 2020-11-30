@@ -14,7 +14,10 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".JoinStudentsGroupActivity"></activity>
         <activity android:name=".StudentActivity" />
+        <activity android:name=".TeacherMessages" />
         <activity android:name=".TeacherActivity" />
+        <activity android:name=".AddStudentGroupActivity" />
+        <activity android:name=".ShowMessagesHistoryActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".StudentMessages" />

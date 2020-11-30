@@ -4,76 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherActivity">
-
-
-    <EditText
-        android:id="@+id/messageFieldInput"
-        android:layout_width="361dp"
-        android:layout_height="302dp"
-        android:layout_weight="1"
-        android:hint="Napisz wiadomość"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLength="2000"
-        android:maxLines="4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.42"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533" />
-
-    <Spinner
-        android:id="@+id/spinnerRecieverGroup"
-        android:layout_width="353dp"
-        android:layout_height="37dp"
-        android:layout_marginBottom="80dp"
-        android:backgroundTint="@color/purple_500"
-        android:backgroundTintMode="screen"
-        android:spinnerMode="dialog"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageFieldInput"
-        app:layout_constraintVertical_bias="0.538" />
+    tools:context=".StudentActivity">
 
     <Button
-        android:id="@+id/sendMessageButton"
+        android:id="@+id/openSendMessageActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/holo_green_dark"
-        android:text="Wyślij"
-        app:icon="@android:drawable/ic_menu_send"
+        android:text="Wyślij wiadomość do studentów"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRecieverGroup"
-        app:layout_constraintVertical_bias="0.452" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.183" />
 
-    <TextView
-        android:id="@+id/selectRevieversLabel"
+    <Button
+        android:id="@+id/showMessagesHistoryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wybierz grupę odbiorców"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerRecieverGroup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.082"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
-        android:id="@+id/messageTileTextView"
-        android:layout_width="346dp"
-        android:layout_height="53dp"
-        android:hint="Tytuł wiadomości"
+        android:text="Przejrzyj historię wyświetleń"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.234" />
+        app:layout_constraintVertical_bias="0.367" />
 
+    <Button
+        android:id="@+id/addStudentsGroupButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dodaj grupę studencką"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.541" />
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/notificationsCardView"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="5dp"
+        android:visibility="invisible"
+        app:cardBackgroundColor="?attr/colorError"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import com.example.pam.api.StudentApi
 import com.example.pam.dto.StudentDTO
-import com.example.pam.dto.StudentsGroupDTO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +27,7 @@ class StudentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student)
-        val signUpStudentsGroupButton = findViewById<Button>(R.id.signUpStudentsGroupButton)
+        val signUpStudentsGroupButton = findViewById<Button>(R.id.openSendMessageActivityButton)
 
         notificationsText = findViewById(R.id.notificationsCounterText)
         notificationsBox = findViewById(R.id.notificationsCardView)

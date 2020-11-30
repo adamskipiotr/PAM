@@ -1,102 +1,37 @@
 package com.example.pam
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.*
-import com.example.pam.api.TeacherApi
-import com.example.pam.dto.MessageDTO
-import com.example.pam.dto.StudentsGroupDTO
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+
 
 class TeacherActivity : AppCompatActivity() {
-    lateinit var spinner: Spinner
-    lateinit var messageTextField: EditText
-    lateinit var titleTextField: EditText
-    lateinit var sendMessageButton: Button
-    val context: Context = this
-    var studentsGroupsList: List<StudentsGroupDTO>? = null
 
+    val context: Context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
-        mapViewsToReferences();
+        val sendMessagesButton = findViewById<Button>(R.id.openSendMessageActivityButton)
+        val addStudentsGroupButton = findViewById<Button>(R.id.addStudentsGroupButton)
+        val showMessagesHistoryButton = findViewById<Button>(R.id.showMessagesHistoryButton)
 
-        val builder = Retrofit.Builder()
-        builder.baseUrl("http://192.168.0.213:8080/")
-        builder.addConverterFactory(GsonConverterFactory.create())
-        val retrofit: Retrofit
-        retrofit = builder.build()
-        val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
-        val call: Call<List<StudentsGroupDTO>> = teacherApi.getAllStudentsGroups()
-        call.enqueue(object : Callback<List<StudentsGroupDTO>> {
 
-            override fun onFailure(call: Call<List<StudentsGroupDTO>>, t: Throwable) {
-                Toast.makeText(applicationContext, "Błąd pobierania listy grup", Toast.LENGTH_LONG)
-                    .show()
-            }
-
-            override fun onResponse(
-                call: Call<List<StudentsGroupDTO>>,
-                response: Response<List<StudentsGroupDTO>>
-            ) {
-                val studentsGroupsNames: MutableList<String> = LinkedList<String>().toMutableList()
-                studentsGroupsList = response.body()
-                studentsGroupsList?.forEach {
-                    studentsGroupsNames += it.toString()
-                }
-                val adapter =
-                    ArrayAdapter(context, android.R.layout.simple_spinner_item, studentsGroupsNames)
-                spinner.adapter = adapter
-            }
-        })
-
-        sendMessageButton.setOnClickListener() {
-            var idGroupToInform: Long? = null
-            val selectedGroupName = spinner.selectedItem.toString()
-            studentsGroupsList?.forEach {
-                if (it.groupName.equals(selectedGroupName)) {
-                    idGroupToInform = it.groupID!!
-                }
-            }
-            val messageDTO = MessageDTO(
-                idGroupToInform!!,
-                messageTextField.text.toString(),
-                titleTextField.text.toString(),
-                "Autor testowy"
-            )
-            val callSendMessage: Call<Void> = teacherApi.sendNewMessage(messageDTO)
-            callSendMessage.enqueue(object : Callback<Void> {
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(
-                    call: Call<Void>,
-                    response: Response<Void>
-                ) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Wiadomość została wysłana",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
+        sendMessagesButton.setOnClickListener {
+            val intent = Intent(context, TeacherMessages::class.java).apply {};
+            startActivity(intent)
         }
-    }
 
+        addStudentsGroupButton.setOnClickListener {
+            val intent = Intent(context, AddStudentGroupActivity::class.java).apply {};
+            startActivity(intent)
+        }
 
-    private fun mapViewsToReferences() {
-        spinner = findViewById(R.id.spinnerRecieverGroup)
-        messageTextField = findViewById(R.id.messageFieldInput)
-        sendMessageButton = findViewById(R.id.sendMessageButton)
-        titleTextField = findViewById(R.id.messageTileTextView)
+        showMessagesHistoryButton.setOnClickListener {
+            val intent = Intent(context, ShowMessagesHistoryActivity::class.java).apply {};
+            startActivity(intent)
+        }
     }
 }
