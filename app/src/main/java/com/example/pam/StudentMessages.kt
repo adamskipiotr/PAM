@@ -22,6 +22,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
+
 class StudentMessages : AppCompatActivity() {
 
     var arrayListMessage: ArrayList<MessageDTO>? = null
