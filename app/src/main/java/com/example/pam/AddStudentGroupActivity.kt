@@ -35,35 +35,27 @@ class AddStudentGroupActivity : AppCompatActivity() {
             val retrofit: Retrofit
             retrofit = builder.build()
             val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
-            val call: Call<List<StudentsGroupDTO>> = teacherApi.getAllStudentsGroups()
-            call.enqueue(object : Callback<List<StudentsGroupDTO>> {
+            val call: Call<Void> = teacherApi.createNewGroup(groupName)
+            call.enqueue(object : Callback<Void> {
 
-                override fun onFailure(call: Call<List<StudentsGroupDTO>>, t: Throwable) {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
                     Toast.makeText(
                         applicationContext,
-                        "Błąd pobierania listy grup",
+                        "Błąd dodawania grupy grup",
                         Toast.LENGTH_LONG
                     )
                         .show()
                 }
 
                 override fun onResponse(
-                    call: Call<List<StudentsGroupDTO>>,
-                    response: Response<List<StudentsGroupDTO>>
+                    call: Call<Void>,
+                    response: Response<Void>
                 ) {
-                    val studentsGroupsNames: MutableList<String> =
-                        LinkedList<String>().toMutableList()
-                    studentsGroupsList = response.body()
-                    studentsGroupsList?.forEach {
-                        studentsGroupsNames += it.toString()
-                    }
-                    val adapter =
-                        ArrayAdapter(
-                            context,
-                            android.R.layout.simple_spinner_item,
-                            studentsGroupsNames
-                        )
-                    spinner.adapter = adapter
+                    Toast.makeText(
+                        applicationContext,
+                        "Grupa została dodana do bazy danych",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             })
         }

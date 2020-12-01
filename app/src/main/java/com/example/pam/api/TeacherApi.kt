@@ -23,4 +23,13 @@ interface TeacherApi {
 
     @POST("teacher/add")
     fun createTeacher(@Body teacherDTO:  TeacherDTO): Call<TeacherDTO>
+
+    @POST("group/addNewGroup")
+    fun createNewGroup(@Body newStudentGroupName: String): Call<Void>
+
+    @POST("teacher/getAllMessages")
+    fun getAllTeacherMessages(@Body teacherDTO: TeacherDTO):Call<List<MessageDTO>>
+
+    @POST("teacher/getMessageDetails")
+    fun getMessageDetails(messageToCheck: MessageDTO): Call<Void>
 }

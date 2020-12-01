@@ -12,6 +12,12 @@ class TeacherDTO {
         this.password = password
     }
 
+    constructor(teacherID: Long,username: String, password: String) {
+        this.teacherID = teacherID
+        this.username = username
+        this.password = password
+    }
+
     fun getUsername(): String {
         return username!!
     }
