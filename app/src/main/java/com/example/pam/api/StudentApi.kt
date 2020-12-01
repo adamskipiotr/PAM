@@ -2,6 +2,8 @@ package com.example.pam.api
 
 import com.example.pam.dto.MessageDTO
 import com.example.pam.dto.StudentDTO
+import com.example.pam.dto.StudentsGroupDTO
+import com.example.pam.responses.StudentLoginResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -11,8 +13,17 @@ import retrofit2.http.*
     fun createStudent(@Body studentDTO: StudentDTO): Call<StudentDTO>
 
     @POST("student/login")
-    fun loginStudent(@Body studentDTO: StudentDTO): Call<Boolean>
+    fun loginStudent(@Body studentDTO: StudentDTO): Call<StudentLoginResponse>
 
     @POST("student/getAllMessages")
     fun getAllMessagesForStudent(@Body studentDTO: StudentDTO):Call<List<MessageDTO>>
-}
+
+    @POST("student/markAsSeen/{studentName}")
+    fun markMessageAsSeen(@Path("studentName") studentName:String,@Body messageDTO: MessageDTO):Call<Void>
+
+    @GET("group/getAll")
+    fun getAllStudentsGroups():Call<List<StudentsGroupDTO>>
+
+    @POST("student/getUnreadMessagesCounter")
+    fun getUnreadMessagesCounter(@Body studentDTO: StudentDTO): Call<Int>
+ }

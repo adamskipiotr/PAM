@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pam">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,10 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PAM"
         android:usesCleartextTraffic="true">
-        <activity android:name=".User"></activity>
+        <activity android:name=".JoinStudentsGroupActivity"></activity>
+        <activity android:name=".StudentActivity" />
+        <activity android:name=".TeacherMessages" />
+        <activity android:name=".TeacherActivity" />
+        <activity android:name=".AddStudentGroupActivity" />
+        <activity android:name=".ShowMessagesHistoryActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".UserMessages" />
+        <activity android:name=".StudentMessages" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
