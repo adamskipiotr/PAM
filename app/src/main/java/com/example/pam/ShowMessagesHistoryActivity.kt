@@ -8,10 +8,9 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import com.example.pam.adapters.MessageAdapter
-import com.example.pam.api.StudentApi
+import com.example.pam.api.TeacherApi
 import com.example.pam.dto.MessageDTO
-import com.example.pam.dto.StudentDTO
-import com.example.pam.dto.StudentsGroupDTO
+import com.example.pam.dto.TeacherDTO
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,19 +30,19 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher_messages)
-   /*    val  sp: SharedPreferences = getSharedPreferences("login",MODE_PRIVATE)
+        val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
         val builder = Retrofit.Builder()
         builder.baseUrl("http://192.168.0.213:8080/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
-        val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-        val ID = sp.getLong("ID",-1)
-        val username =  sp.getString("username","EMPTY")
-        val password = sp.getString("password","EMPTY")
-        val studentTemp = StudentDTO(ID, username!!, password!!)
-        val call: Call<List<MessageDTO>> = studentApi.getAllMessagesForStudent(studentTemp)
+        val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
+        val ID = sp.getLong("ID", -1)
+        val username = sp.getString("username", "EMPTY")
+        val password = sp.getString("password", "EMPTY")
+        val activeTeacher = TeacherDTO(ID, username!!, password!!)
+        val call: Call<List<MessageDTO>> = teacherApi.getAllTeacherMessages(activeTeacher)
         call.enqueue(object : Callback<List<MessageDTO>> {
 
             override fun onFailure(call: Call<List<MessageDTO>>, t: Throwable) {
@@ -56,7 +55,7 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
             ) {
                 Toast.makeText(applicationContext, "Sukces", Toast.LENGTH_LONG).show()
                 val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
-                arrayListMessage = ArrayList()
+                arrayListMessage = java.util.ArrayList()
                 messagesToRead = response.body()
                 messagesToRead?.forEach {
                     messagesToShow += it.toString()
@@ -68,30 +67,42 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
                     android.R.layout.simple_dropdown_item_1line,
                     messagesToShow
                 )
-                val listViewItem = findViewById<ListView>(R.id.listView)
+                val listViewItem = findViewById<ListView>(R.id.listViewTeacher)
                 val adapterCustom = MessageAdapter(context, arrayListMessage!!)
                 listViewItem.adapter = adapterCustom
 
                 listViewItem.onItemClickListener =
                     AdapterView.OnItemClickListener { parent, view, position, id ->
 
-                        val clickedItem = parent.getItemAtPosition(position).toString()
+                        val clickedItem :MessageDTO = parent.getItemAtPosition(position) as MessageDTO
+
 
                         MaterialAlertDialogBuilder(context).apply {
-                            setTitle("Item: $clickedItem")
-                            setMessage("Oznaczyć jako przeczytaną?")
+                            setTitle("Wiadomość: ${clickedItem.title}")
+                            setMessage("Wyświetlone przez: ${clickedItem.author}")
                             setPositiveButton("Potwierdź") { _, _ ->
-                                val messageToDelete = messagesToRead!!.elementAt(position)
-                                val call: Call<Void> = studentApi.markMessageAsSeen("Android",messageToDelete)
+                                val messageToCheck = messagesToRead!!.elementAt(position)
+                                val call: Call<Void> =
+                                    teacherApi.getMessageDetails(messageToCheck)
                                 call.enqueue(object : Callback<Void> {
 
                                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                                        Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Błąd serwera",
+                                            Toast.LENGTH_LONG
+                                        ).show()
                                     }
 
-                                    override fun onResponse(  call: Call<Void>,
-                                                              response: Response<Void>) {
-                                        Toast.makeText(applicationContext, "Oznaczono jako przeczytana", Toast.LENGTH_LONG).show()
+                                    override fun onResponse(
+                                        call: Call<Void>,
+                                        response: Response<Void>
+                                    ) {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Oznaczono jako przeczytana",
+                                            Toast.LENGTH_LONG
+                                        ).show()
 
                                     }
                                 })
@@ -103,6 +114,6 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
                         }.create().show()
                     }
             }
-        })*/
+        })
     }
 }

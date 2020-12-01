@@ -5,13 +5,10 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
-import com.example.pam.adapters.MessageAdapter
 import com.example.pam.api.TeacherApi
 import com.example.pam.dto.MessageDTO
-import com.example.pam.dto.StudentDTO
 import com.example.pam.dto.StudentsGroupDTO
 import com.example.pam.dto.TeacherDTO
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,15 +23,13 @@ class TeacherMessages : AppCompatActivity() {
     lateinit var sendMessageButton: Button
     val context: Context = this
     var studentsGroupsList: List<StudentsGroupDTO>? = null
-    var arrayListMessage: ArrayList<MessageDTO>? = null
-    var messagesToRead: List<MessageDTO>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher_send_message)
-        val  sp: SharedPreferences = getSharedPreferences("login",MODE_PRIVATE)
         mapViewsToReferences();
+        val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
         val builder = Retrofit.Builder()
         builder.baseUrl("http://192.168.0.213:8080/")
@@ -42,83 +37,65 @@ class TeacherMessages : AppCompatActivity() {
         val retrofit: Retrofit
         retrofit = builder.build()
         val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
-        val ID = sp.getLong("ID",-1)
-        val username =  sp.getString("username","EMPTY")
-        val password = sp.getString("password","EMPTY")
-        val activeTeacher = TeacherDTO(ID, username!!, password!!)
-        val call: Call<List<MessageDTO>> = teacherApi.getAllTeacherMessages(activeTeacher)
-        call.enqueue(object : Callback<List<MessageDTO>> {
+        val username = sp.getString("username", "EMPTY")
+        val call: Call<List<StudentsGroupDTO>> = teacherApi.getAllStudentsGroups()
+        call.enqueue(object : Callback<List<StudentsGroupDTO>> {
 
-            override fun onFailure(call: Call<List<MessageDTO>>, t: Throwable) {
-                Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+            override fun onFailure(call: Call<List<StudentsGroupDTO>>, t: Throwable) {
+                Toast.makeText(applicationContext, "Błąd pobierania listy grup", Toast.LENGTH_LONG)
+                    .show()
             }
 
             override fun onResponse(
-                call: Call<List<MessageDTO>>,
-                response: Response<List<MessageDTO>>
+                call: Call<List<StudentsGroupDTO>>,
+                response: Response<List<StudentsGroupDTO>>
             ) {
-                Toast.makeText(applicationContext, "Sukces", Toast.LENGTH_LONG).show()
-                val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
-                arrayListMessage = ArrayList()
-                messagesToRead = response.body()
-                messagesToRead?.forEach {
-                    messagesToShow += it.toString()
-                    arrayListMessage!!.add(it)
+                val studentsGroupsNames: MutableList<String> = LinkedList<String>().toMutableList()
+                studentsGroupsList = response.body()
+                studentsGroupsList?.forEach {
+                    studentsGroupsNames += it.toString()
                 }
-
-                val adapter: ArrayAdapter<String> = ArrayAdapter(
-                    context,
-                    android.R.layout.simple_dropdown_item_1line,
-                    messagesToShow
-                )
-                val listViewItem = findViewById<ListView>(R.id.listView)
-                val adapterCustom = MessageAdapter(context, arrayListMessage!!)
-                listViewItem.adapter = adapterCustom
-
-                listViewItem.onItemClickListener =
-                    AdapterView.OnItemClickListener { parent, view, position, id ->
-
-                        val clickedItem = parent.getItemAtPosition(position).toString()
-
-                        MaterialAlertDialogBuilder(context).apply {
-                            setTitle("Item: $clickedItem")
-                            setMessage("Oznaczyć jako przeczytaną?")
-                            setPositiveButton("Potwierdź") { _, _ ->
-                                val messageToCheck = messagesToRead!!.elementAt(position)
-                                val call: Call<Void> =
-                                    teacherApi.getMessageDetails(messageToCheck)
-                                call.enqueue(object : Callback<Void> {
-
-                                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Błąd serwera",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-
-                                    override fun onResponse(
-                                        call: Call<Void>,
-                                        response: Response<Void>
-                                    ) {
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Oznaczono jako przeczytana",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                    }
-                                })
-                                messagesToShow.removeAt(position)
-                                //TODO tu powinno sie usuwac
-                                adapter.notifyDataSetChanged()
-                            }
-                            setNeutralButton("Anuluj") { _, _ -> }
-                        }.create().show()
-                    }
+                val adapter =
+                    ArrayAdapter(context, android.R.layout.simple_spinner_item, studentsGroupsNames)
+                spinner.adapter = adapter
             }
         })
+
+        sendMessageButton.setOnClickListener() {
+            var idGroupToInform: Long? = null
+            val selectedGroupName = spinner.selectedItem.toString()
+            studentsGroupsList?.forEach {
+                if (it.groupName.equals(selectedGroupName)) {
+                    idGroupToInform = it.groupID!!
+                }
+            }
+            val messageDTO = MessageDTO(
+                idGroupToInform!!,
+                messageTextField.text.toString(),
+                titleTextField.text.toString(),
+                username!!
+            )
+            val callSendMessage: Call<Void> = teacherApi.sendNewMessage(messageDTO)
+            callSendMessage.enqueue(object : Callback<Void> {
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onResponse(
+                    call: Call<Void>,
+                    response: Response<Void>
+                ) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Wiadomość została wysłana",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+        }
     }
+
 
     private fun mapViewsToReferences() {
         spinner = findViewById(R.id.spinnerRecieverGroup)
