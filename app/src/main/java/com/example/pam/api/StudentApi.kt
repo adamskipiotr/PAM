@@ -10,7 +10,7 @@ import retrofit2.http.*
  interface StudentApi {
 
     @POST("student/add")
-    fun createStudent(@Body studentDTO: StudentDTO): Call<StudentDTO>
+    fun createStudent(@Body studentDTO: StudentDTO): Call<Void>
 
     @POST("student/login")
     fun loginStudent(@Body studentDTO: StudentDTO): Call<StudentLoginResponse>
@@ -18,12 +18,15 @@ import retrofit2.http.*
     @POST("student/getAllMessages")
     fun getAllMessagesForStudent(@Body studentDTO: StudentDTO):Call<List<MessageDTO>>
 
-    @POST("student/markAsSeen/{studentName}")
-    fun markMessageAsSeen(@Path("studentName") studentName:String,@Body messageDTO: MessageDTO):Call<Void>
+    @POST("student/markAsSeen/{id}")
+    fun markMessageAsSeen(@Path("id") id:Long,@Body messageDTO: MessageDTO):Call<Void>
 
     @GET("group/getAll")
     fun getAllStudentsGroups():Call<List<StudentsGroupDTO>>
 
     @POST("student/getUnreadMessagesCounter")
     fun getUnreadMessagesCounter(@Body studentDTO: StudentDTO): Call<Int>
+
+    @POST("group/joinGroup/{IDGroupToJoin}")
+     fun joinGroup(@Path("IDGroupToJoin") idGroupToJoin: Long?,@Body idStudent: Long): Call<Void>
  }

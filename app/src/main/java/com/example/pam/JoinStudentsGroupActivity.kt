@@ -1,9 +1,11 @@
 package com.example.pam
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.pam.api.StudentApi
@@ -18,14 +20,16 @@ import java.util.*
 class JoinStudentsGroupActivity : AppCompatActivity() {
     lateinit var spinner: Spinner
     val context: Context = this
-    var studentsGroupsList: List<StudentsGroupDTO>? = null
 
+    var studentsGroupsList: List<StudentsGroupDTO>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_join_students_group)
         spinner = findViewById(R.id.spinnerStudentsGroupToJoin)
+        val joinGroupButton = findViewById<Button>(R.id.joinSelectedGroupButton)
+        val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
         val builder = Retrofit.Builder()
         builder.baseUrl("http://192.168.0.213:8080/")
@@ -55,5 +59,34 @@ class JoinStudentsGroupActivity : AppCompatActivity() {
                 spinner.adapter = adapter
             }
         })
+
+        joinGroupButton.setOnClickListener {
+            var idGroupToJoin: Long? = null
+            val idStudent = sp.getLong("ID", -1)
+            val selectedGroupName = spinner.selectedItem.toString()
+            studentsGroupsList?.forEach {
+                if (it.groupName == selectedGroupName) {
+                    idGroupToJoin = it.groupID!!
+                }
+            }
+            val callSendMessage: Call<Void> = studentApi.joinGroup(idGroupToJoin, idStudent)
+            callSendMessage.enqueue(object : Callback<Void> {
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onResponse(
+                    call: Call<Void>,
+                    response: Response<Void>
+                ) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Dołączyłeś do grupy",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+        }
     }
 }

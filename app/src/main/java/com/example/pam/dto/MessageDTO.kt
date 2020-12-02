@@ -1,7 +1,7 @@
 package com.example.pam.dto
 
 class MessageDTO {
-    var groupID: Long? = null
+    private var groupID: Long? = null
     var title: String? = null
     var author: String? = null
     var seenByUser: Boolean? = null

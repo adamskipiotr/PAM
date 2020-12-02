@@ -4,26 +4,21 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
-import com.example.pam.api.StudentApi
 import com.example.pam.api.TeacherApi
-import com.example.pam.dto.StudentsGroupDTO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 class AddStudentGroupActivity : AppCompatActivity() {
-    lateinit var spinner: Spinner
     val context: Context = this
-    var studentsGroupsList: List<StudentsGroupDTO>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_students_group)
-        val sendNewGroupButton = findViewById<Button>(R.id.addGroupButton)
+        val sendNewGroupButton = findViewById<Button>(R.id.joinSelectedGroupButton)
         val inputGroupName = findViewById<TextView>(R.id.addGroupInput)
 
 

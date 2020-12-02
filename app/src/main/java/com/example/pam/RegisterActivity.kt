@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RegisterActivity : AppCompatActivity() {
 
-    lateinit var dbHandler: DatabaseHelper
+    private lateinit var dbHandler: DatabaseHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,15 +56,15 @@ class RegisterActivity : AppCompatActivity() {
         val newStudent =
             StudentDTO(1L, username, password)
 
-        val call: Call<StudentDTO> = studentApi.createStudent(newStudent)
-        call.enqueue(object : Callback<StudentDTO> {
+        val call: Call<Void> = studentApi.createStudent(newStudent)
+        call.enqueue(object : Callback<Void> {
 
-            override fun onFailure(call: Call<StudentDTO>, t: Throwable) {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
                 Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
             }
 
-            override fun onResponse(call: Call<StudentDTO>, response: Response<StudentDTO>) {
-                Toast.makeText(applicationContext, "Nowy StudentActivity zostł dodany", Toast.LENGTH_LONG).show()
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Toast.makeText(applicationContext, "Nowy Student został dodany", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -74,14 +74,14 @@ class RegisterActivity : AppCompatActivity() {
         val newTeacherDTO =
             TeacherDTO(username, password)
 
-        val call: Call<TeacherDTO> = teacherApi.createTeacher(newTeacherDTO)
-        call.enqueue(object : Callback<TeacherDTO> {
+        val call: Call<Void> = teacherApi.createTeacher(newTeacherDTO)
+        call.enqueue(object : Callback<Void> {
 
-            override fun onFailure(call: Call<TeacherDTO>, t: Throwable) {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
                 Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
             }
 
-            override fun onResponse(call: Call<TeacherDTO>, response: Response<TeacherDTO>) {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Toast.makeText(applicationContext, "Nowy nauczyciel został dodany", Toast.LENGTH_LONG).show()
             }
         })

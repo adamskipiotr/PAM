@@ -11,7 +11,6 @@ import com.example.pam.adapters.MessageAdapter
 import com.example.pam.api.StudentApi
 import com.example.pam.dto.MessageDTO
 import com.example.pam.dto.StudentDTO
-import com.example.pam.dto.StudentsGroupDTO
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,10 +39,10 @@ class StudentMessages : AppCompatActivity() {
         val retrofit: Retrofit
         retrofit = builder.build()
         val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-        val ID = sp.getLong("ID",-1)
+        val id = sp.getLong("ID",-1)
         val username =  sp.getString("username","EMPTY")
         val password = sp.getString("password","EMPTY")
-        val studentTemp = StudentDTO(ID, username!!, password!!)
+        val studentTemp = StudentDTO(id, username!!, password!!)
         val call: Call<List<MessageDTO>> = studentApi.getAllMessagesForStudent(studentTemp)
         call.enqueue(object : Callback<List<MessageDTO>> {
 
@@ -83,7 +82,7 @@ class StudentMessages : AppCompatActivity() {
                             setMessage("Oznaczyć jako przeczytaną?")
                             setPositiveButton("Potwierdź") { _, _ ->
                                 val messageToDelete = messagesToRead!!.elementAt(position)
-                                val call: Call<Void> = studentApi.markMessageAsSeen("Android",messageToDelete)
+                                val call: Call<Void> = studentApi.markMessageAsSeen(studentTemp.getStudentID(),messageToDelete)
                                 call.enqueue(object : Callback<Void> {
 
                                     override fun onFailure(call: Call<Void>, t: Throwable) {

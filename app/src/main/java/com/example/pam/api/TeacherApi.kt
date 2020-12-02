@@ -1,7 +1,6 @@
 package com.example.pam.api
 
 import com.example.pam.dto.MessageDTO
-import com.example.pam.dto.StudentDTO
 import com.example.pam.dto.StudentsGroupDTO
 import com.example.pam.dto.TeacherDTO
 import com.example.pam.responses.TeacherLoginResponse
@@ -22,7 +21,7 @@ interface TeacherApi {
     fun loginTeacher(@Body teacherDTO: TeacherDTO):Call<TeacherLoginResponse>
 
     @POST("teacher/add")
-    fun createTeacher(@Body teacherDTO:  TeacherDTO): Call<TeacherDTO>
+    fun createTeacher(@Body teacherDTO:  TeacherDTO): Call<Void>
 
     @POST("group/addNewGroup")
     fun createNewGroup(@Body newStudentGroupName: String): Call<Void>

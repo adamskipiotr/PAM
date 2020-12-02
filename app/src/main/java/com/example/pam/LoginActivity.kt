@@ -59,11 +59,9 @@ class LoginActivity : AppCompatActivity() {
                         sp.edit().putLong("ID",serverLoginStatus.getActiveStudent().getStudentID()).apply()
                         sp.edit().putString("username",serverLoginStatus.getActiveStudent().getUsername()).apply()
                         sp.edit().putString("password",serverLoginStatus.getActiveStudent().getPassword()).apply()
-                        val intent = Intent(context, StudentActivity::class.java).apply {};
+                        val intent = Intent(context, StudentActivity::class.java).apply {}
                         startActivity(intent)
                     } else {
-                        Toast.makeText(applicationContext, "Błąd logowania", Toast.LENGTH_LONG)
-                            .show()
                         loginTeacher(
                             usernameInput.text.toString(),
                             passwordInput.text.toString()
@@ -100,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
                     sp.edit().putLong("ID",serverLoginStatus.getActiveTeacher().getTeacherID()).apply()
                     sp.edit().putString("username",serverLoginStatus.getActiveTeacher().getUsername()).apply()
                     sp.edit().putString("password",serverLoginStatus.getActiveTeacher().getPassword()).apply()
-                    val intent = Intent(context, TeacherActivity::class.java).apply {};
+                    val intent = Intent(context, TeacherActivity::class.java).apply {}
                     startActivity(intent)
                 } else {
                     Toast.makeText(applicationContext, "Błąd logowania", Toast.LENGTH_LONG)

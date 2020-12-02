@@ -1,10 +1,8 @@
 package com.example.pam.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
-import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -60,8 +58,8 @@ class MessageAdapter(context: Context, private val dataSource: ArrayList<Message
             0,
            2,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        );
-        
+        )
+
         return rowView
     }
 }

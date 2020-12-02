@@ -12,6 +12,6 @@ class StudentsGroupDTO {
     constructor()
 
     override fun toString(): String {
-        return groupName;
+        return groupName
     }
 }

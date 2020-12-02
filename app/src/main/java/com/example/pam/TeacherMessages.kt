@@ -8,7 +8,6 @@ import android.widget.*
 import com.example.pam.api.TeacherApi
 import com.example.pam.dto.MessageDTO
 import com.example.pam.dto.StudentsGroupDTO
-import com.example.pam.dto.TeacherDTO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,9 +17,9 @@ import java.util.*
 
 class TeacherMessages : AppCompatActivity() {
     lateinit var spinner: Spinner
-    lateinit var messageTextField: EditText
-    lateinit var titleTextField: EditText
-    lateinit var sendMessageButton: Button
+    private lateinit var messageTextField: EditText
+    private lateinit var titleTextField: EditText
+    private lateinit var sendMessageButton: Button
     val context: Context = this
     var studentsGroupsList: List<StudentsGroupDTO>? = null
 
@@ -28,7 +27,7 @@ class TeacherMessages : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher_send_message)
-        mapViewsToReferences();
+        mapViewsToReferences()
         val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
         val builder = Retrofit.Builder()
@@ -61,11 +60,11 @@ class TeacherMessages : AppCompatActivity() {
             }
         })
 
-        sendMessageButton.setOnClickListener() {
+        sendMessageButton.setOnClickListener {
             var idGroupToInform: Long? = null
             val selectedGroupName = spinner.selectedItem.toString()
             studentsGroupsList?.forEach {
-                if (it.groupName.equals(selectedGroupName)) {
+                if (it.groupName == selectedGroupName) {
                     idGroupToInform = it.groupID!!
                 }
             }

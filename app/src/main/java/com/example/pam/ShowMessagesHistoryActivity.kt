@@ -38,10 +38,10 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
         val retrofit: Retrofit
         retrofit = builder.build()
         val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
-        val ID = sp.getLong("ID", -1)
+        val id = sp.getLong("ID", -1)
         val username = sp.getString("username", "EMPTY")
         val password = sp.getString("password", "EMPTY")
-        val activeTeacher = TeacherDTO(ID, username!!, password!!)
+        val activeTeacher = TeacherDTO(id, username!!, password!!)
         val call: Call<List<MessageDTO>> = teacherApi.getAllTeacherMessages(activeTeacher)
         call.enqueue(object : Callback<List<MessageDTO>> {
 

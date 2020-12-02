@@ -20,17 +20,17 @@ class TeacherActivity : AppCompatActivity() {
 
 
         sendMessagesButton.setOnClickListener {
-            val intent = Intent(context, TeacherMessages::class.java).apply {};
+            val intent = Intent(context, TeacherMessages::class.java).apply {}
             startActivity(intent)
         }
 
         addStudentsGroupButton.setOnClickListener {
-            val intent = Intent(context, AddStudentGroupActivity::class.java).apply {};
+            val intent = Intent(context, AddStudentGroupActivity::class.java).apply {}
             startActivity(intent)
         }
 
         showMessagesHistoryButton.setOnClickListener {
-            val intent = Intent(context, ShowMessagesHistoryActivity::class.java).apply {};
+            val intent = Intent(context, ShowMessagesHistoryActivity::class.java).apply {}
             startActivity(intent)
         }
     }

@@ -2,6 +2,7 @@ package com.example.pam
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -14,13 +15,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 class StudentActivity : AppCompatActivity() {
     var notificationCounter = 0
     lateinit var notificationsText: TextView
     lateinit var notificationsBox: CardView
-    lateinit var checkMessagesButton: Button
+    private lateinit var checkMessagesButton: Button
     val context: Context = this
 
 
@@ -28,6 +28,7 @@ class StudentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student)
         val signUpStudentsGroupButton = findViewById<Button>(R.id.openSendMessageActivityButton)
+        val  sp: SharedPreferences = getSharedPreferences("login",MODE_PRIVATE)
 
         notificationsText = findViewById(R.id.notificationsCounterText)
         notificationsBox = findViewById(R.id.notificationsCardView)
@@ -41,7 +42,10 @@ class StudentActivity : AppCompatActivity() {
         val retrofit: Retrofit
         retrofit = builder.build()
         val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
-        val studentDTO =  StudentDTO(1L,"Android","Haslo")
+        val id = sp.getLong("ID",-1)
+        val username =  sp.getString("username","EMPTY")
+        val password = sp.getString("password","EMPTY")
+        val studentDTO =  StudentDTO(id,username!!,password!!)
         val call: Call<Int> = studentApi.getUnreadMessagesCounter(studentDTO)
         call.enqueue(object : Callback<Int> {
 
@@ -54,21 +58,21 @@ class StudentActivity : AppCompatActivity() {
                 notificationsText.visibility = View.VISIBLE
                 notificationsBox.visibility = View.VISIBLE
                 notificationCounter = response.body()!!
-                notificationsText.setText(notificationCounter.toString())
+                notificationsText.text = notificationCounter.toString()
             }
         })
 
-        checkMessagesButton.setOnClickListener() {
+        checkMessagesButton.setOnClickListener {
             notificationCounter = 0
-            notificationsText.setText(notificationCounter.toString())
+            notificationsText.text = notificationCounter.toString()
             notificationsText.visibility = View.INVISIBLE
             notificationsBox.visibility = View.INVISIBLE
-            val intent = Intent(this, StudentMessages::class.java).apply {};
+            val intent = Intent(this, StudentMessages::class.java).apply {}
             startActivity(intent)
         }
 
         signUpStudentsGroupButton.setOnClickListener {
-            val intent = Intent(this, JoinStudentsGroupActivity::class.java).apply {};
+            val intent = Intent(this, JoinStudentsGroupActivity::class.java).apply {}
             startActivity(intent)
         }
 
