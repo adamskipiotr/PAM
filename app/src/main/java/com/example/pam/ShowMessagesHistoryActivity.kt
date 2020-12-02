@@ -79,36 +79,8 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
 
                         MaterialAlertDialogBuilder(context).apply {
                             setTitle("Wiadomość: ${clickedItem.title}")
-                            setMessage("Wyświetlone przez: ${clickedItem.author}")
+                            setMessage("Wyświetlone przez: ${clickedItem.contents}")
                             setPositiveButton("Potwierdź") { _, _ ->
-                                val messageToCheck = messagesToRead!!.elementAt(position)
-                                val call: Call<Void> =
-                                    teacherApi.getMessageDetails(messageToCheck)
-                                call.enqueue(object : Callback<Void> {
-
-                                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Błąd serwera",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-
-                                    override fun onResponse(
-                                        call: Call<Void>,
-                                        response: Response<Void>
-                                    ) {
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Oznaczono jako przeczytana",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                    }
-                                })
-                                messagesToShow.removeAt(position)
-                                //TODO tu powinno sie usuwac
-                                adapter.notifyDataSetChanged()
                             }
                             setNeutralButton("Anuluj") { _, _ -> }
                         }.create().show()
