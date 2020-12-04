@@ -25,7 +25,7 @@ class AddStudentGroupActivity : AppCompatActivity() {
         sendNewGroupButton.setOnClickListener {
             val groupName = inputGroupName.text.toString()
             val builder = Retrofit.Builder()
-            builder.baseUrl("http://192.168.0.213:8080/")
+            builder.baseUrl("https://pam-polsl.herokuapp.com/")
             builder.addConverterFactory(GsonConverterFactory.create())
             val retrofit: Retrofit
             retrofit = builder.build()

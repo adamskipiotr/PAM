@@ -33,7 +33,7 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
         val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://192.168.0.213:8080/")
+        builder.baseUrl("https://pam-polsl.herokuapp.com/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()

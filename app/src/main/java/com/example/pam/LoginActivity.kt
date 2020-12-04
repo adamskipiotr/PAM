@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             var loginUserResult: Boolean
             val builder = Retrofit.Builder()
-            builder.baseUrl("http://192.168.0.213:8080/")
+            builder.baseUrl("https://pam-polsl.herokuapp.com/")
             builder.addConverterFactory(GsonConverterFactory.create())
             val retrofit: Retrofit
             retrofit = builder.build()
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
         val  sp: SharedPreferences = getSharedPreferences("login",MODE_PRIVATE)
         var loginUserResult: Boolean
         val builder = Retrofit.Builder()
-        builder.baseUrl("http://192.168.0.213:8080/")
+        builder.baseUrl("https://pam-polsl.herokuapp.com/")
         builder.addConverterFactory(GsonConverterFactory.create())
         val retrofit: Retrofit
         retrofit = builder.build()
