@@ -10,6 +10,7 @@ import com.example.pam.api.StudentApi
 import com.example.pam.api.TeacherApi
 import com.example.pam.dto.StudentDTO
 import com.example.pam.dto.TeacherDTO
+import com.example.pam.services.RetrofitBuilderService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,22 +38,17 @@ class RegisterActivity : AppCompatActivity() {
             /*  if (passwordInput != passwordRepeatInput) {
                   Toast.makeText(this, "Hasła nie są identyczne", Toast.LENGTH_SHORT).show()
               } */
-            val builder = Retrofit.Builder()
-            builder.baseUrl("https://pam-polsl.herokuapp.com/")
-            builder.addConverterFactory(GsonConverterFactory.create())
-            val retrofit: Retrofit
-            retrofit = builder.build()
             if(teacherSwitch.isChecked){
-                addNewTeacher( retrofit,usernameInput.text.toString(), passwordInput.text.toString())
+                addNewTeacher(usernameInput.text.toString(), passwordInput.text.toString())
             }
             else{
-                addNewStudent( retrofit,usernameInput.text.toString(), passwordInput.text.toString())
+                addNewStudent(usernameInput.text.toString(), passwordInput.text.toString())
             }
         }
     }
 
-    private fun addNewStudent(retrofit: Retrofit, username: String, password: String) {
-        val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
+    private fun addNewStudent(username: String, password: String) {
+        val studentApi: StudentApi = RetrofitBuilderService.buildRetrofitService(StudentApi::class.java)
         val newStudent =
             StudentDTO(1L, username, password)
 
@@ -69,8 +65,8 @@ class RegisterActivity : AppCompatActivity() {
         })
     }
 
-    private fun addNewTeacher(retrofit: Retrofit, username: String, password: String) {
-        val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
+    private fun addNewTeacher(username: String, password: String) {
+        val teacherApi: TeacherApi = RetrofitBuilderService.buildRetrofitService(TeacherApi::class.java)
         val newTeacherDTO =
             TeacherDTO(username, password)
 

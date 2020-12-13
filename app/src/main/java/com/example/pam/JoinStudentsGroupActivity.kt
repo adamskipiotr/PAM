@@ -10,11 +10,10 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.example.pam.api.StudentApi
 import com.example.pam.dto.StudentsGroupDTO
+import com.example.pam.services.RetrofitBuilderService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class JoinStudentsGroupActivity : AppCompatActivity() {
@@ -31,12 +30,8 @@ class JoinStudentsGroupActivity : AppCompatActivity() {
         val joinGroupButton = findViewById<Button>(R.id.joinSelectedGroupButton)
         val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
-        val builder = Retrofit.Builder()
-        builder.baseUrl("https://pam-polsl.herokuapp.com/")
-        builder.addConverterFactory(GsonConverterFactory.create())
-        val retrofit: Retrofit
-        retrofit = builder.build()
-        val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
+        val studentApi: StudentApi =
+            RetrofitBuilderService.buildRetrofitService(StudentApi::class.java)
         val call: Call<List<StudentsGroupDTO>> = studentApi.getAllStudentsGroups()
         call.enqueue(object : Callback<List<StudentsGroupDTO>> {
 
@@ -49,14 +44,7 @@ class JoinStudentsGroupActivity : AppCompatActivity() {
                 call: Call<List<StudentsGroupDTO>>,
                 response: Response<List<StudentsGroupDTO>>
             ) {
-                val studentsGroupsNames: MutableList<String> = LinkedList<String>().toMutableList()
-                studentsGroupsList = response.body()
-                studentsGroupsList?.forEach {
-                    studentsGroupsNames += it.toString()
-                }
-                val adapter =
-                    ArrayAdapter(context, android.R.layout.simple_spinner_item, studentsGroupsNames)
-                spinner.adapter = adapter
+                populateGroupList(response)
             }
         })
 
@@ -69,24 +57,39 @@ class JoinStudentsGroupActivity : AppCompatActivity() {
                     idGroupToJoin = it.groupID!!
                 }
             }
-            val callSendMessage: Call<Void> = studentApi.joinGroup(idGroupToJoin, idStudent)
-            callSendMessage.enqueue(object : Callback<Void> {
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(
-                    call: Call<Void>,
-                    response: Response<Void>
-                ) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Dołączyłeś do grupy",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
+            joinSelectedGroup(studentApi, idGroupToJoin, idStudent)
         }
+    }
+
+    private fun joinSelectedGroup(studentApi: StudentApi, idGroupToJoin: Long?, idStudent: Long) {
+        val callSendMessage: Call<Void> = studentApi.joinGroup(idGroupToJoin, idStudent)
+        callSendMessage.enqueue(object : Callback<Void> {
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(applicationContext, "Błąd serwera", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(
+                call: Call<Void>,
+                response: Response<Void>
+            ) {
+                Toast.makeText(
+                    applicationContext,
+                    "Dołączyłeś do grupy",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    private fun populateGroupList(response: Response<List<StudentsGroupDTO>>) {
+        val studentsGroupsNames: MutableList<String> = LinkedList<String>().toMutableList()
+        studentsGroupsList = response.body()
+        studentsGroupsList?.forEach {
+            studentsGroupsNames += it.toString()
+        }
+        val adapter =
+            ArrayAdapter(context, android.R.layout.simple_spinner_item, studentsGroupsNames)
+        spinner.adapter = adapter
     }
 }

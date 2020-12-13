@@ -5,9 +5,11 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import com.example.pam.api.StudentApi
 import com.example.pam.api.TeacherApi
 import com.example.pam.dto.MessageDTO
 import com.example.pam.dto.StudentsGroupDTO
+import com.example.pam.services.RetrofitBuilderService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,12 +32,7 @@ class TeacherMessages : AppCompatActivity() {
         mapViewsToReferences()
         val sp: SharedPreferences = getSharedPreferences("login", MODE_PRIVATE)
 
-        val builder = Retrofit.Builder()
-        builder.baseUrl("https://pam-polsl.herokuapp.com/")
-        builder.addConverterFactory(GsonConverterFactory.create())
-        val retrofit: Retrofit
-        retrofit = builder.build()
-        val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
+        val teacherApi: TeacherApi = RetrofitBuilderService.buildRetrofitService(TeacherApi::class.java)
         val username = sp.getString("username", "EMPTY")
         val call: Call<List<StudentsGroupDTO>> = teacherApi.getAllStudentsGroups()
         call.enqueue(object : Callback<List<StudentsGroupDTO>> {

@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import com.example.pam.api.StudentApi
 import com.example.pam.dto.StudentDTO
+import com.example.pam.services.RetrofitBuilderService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,12 +37,7 @@ class StudentActivity : AppCompatActivity() {
         notificationsText.visibility = View.INVISIBLE
         notificationsBox.visibility = View.INVISIBLE
 
-        val builder = Retrofit.Builder()
-        builder.baseUrl("https://pam-polsl.herokuapp.com/")
-        builder.addConverterFactory(GsonConverterFactory.create())
-        val retrofit: Retrofit
-        retrofit = builder.build()
-        val studentApi: StudentApi = retrofit.create(StudentApi::class.java)
+        val studentApi: StudentApi = RetrofitBuilderService.buildRetrofitService(StudentApi::class.java)
         val id = sp.getLong("ID",-1)
         val username =  sp.getString("username","EMPTY")
         val password = sp.getString("password","EMPTY")

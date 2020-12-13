@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import com.example.pam.api.StudentApi
 import com.example.pam.api.TeacherApi
+import com.example.pam.services.RetrofitBuilderService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,12 +26,8 @@ class AddStudentGroupActivity : AppCompatActivity() {
 
         sendNewGroupButton.setOnClickListener {
             val groupName = inputGroupName.text.toString()
-            val builder = Retrofit.Builder()
-            builder.baseUrl("https://pam-polsl.herokuapp.com/")
-            builder.addConverterFactory(GsonConverterFactory.create())
-            val retrofit: Retrofit
-            retrofit = builder.build()
-            val teacherApi: TeacherApi = retrofit.create(TeacherApi::class.java)
+
+            val teacherApi: TeacherApi = RetrofitBuilderService.buildRetrofitService(TeacherApi::class.java)
             val call: Call<Void> = teacherApi.createNewGroup(groupName)
             call.enqueue(object : Callback<Void> {
 

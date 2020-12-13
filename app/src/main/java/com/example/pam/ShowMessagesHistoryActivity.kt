@@ -53,39 +53,42 @@ class ShowMessagesHistoryActivity : AppCompatActivity() {
                 call: Call<List<MessageDTO>>,
                 response: Response<List<MessageDTO>>
             ) {
-                Toast.makeText(applicationContext, "Sukces", Toast.LENGTH_LONG).show()
-                val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
-                arrayListMessage = java.util.ArrayList()
-                messagesToRead = response.body()
-                messagesToRead?.forEach {
-                    messagesToShow += it.toString()
-                    arrayListMessage!!.add(it)
-                }
-
-                val adapter: ArrayAdapter<String> = ArrayAdapter(
-                    context,
-                    android.R.layout.simple_dropdown_item_1line,
-                    messagesToShow
-                )
-                val listViewItem = findViewById<ListView>(R.id.listViewTeacher)
-                val adapterCustom = MessageAdapter(context, arrayListMessage!!)
-                listViewItem.adapter = adapterCustom
-
-                listViewItem.onItemClickListener =
-                    AdapterView.OnItemClickListener { parent, view, position, id ->
-
-                        val clickedItem :MessageDTO = parent.getItemAtPosition(position) as MessageDTO
-
-
-                        MaterialAlertDialogBuilder(context).apply {
-                            setTitle("Wiadomość: ${clickedItem.title}")
-                            setMessage("Wyświetlone przez: ${clickedItem.contents}")
-                            setPositiveButton("Potwierdź") { _, _ ->
-                            }
-                            setNeutralButton("Anuluj") { _, _ -> }
-                        }.create().show()
-                    }
+                populateMessagesHistoryList(response)
             }
         })
+    }
+
+    fun populateMessagesHistoryList(response: Response<List<MessageDTO>>) {
+        Toast.makeText(applicationContext, "Sukces", Toast.LENGTH_LONG).show()
+        val messagesToShow: MutableList<String> = LinkedList<String>().toMutableList()
+        arrayListMessage = java.util.ArrayList()
+        messagesToRead = response.body()
+        messagesToRead?.forEach {
+            messagesToShow += it.toString()
+            arrayListMessage!!.add(it)
+        }
+
+        ArrayAdapter(
+            context,
+            android.R.layout.simple_dropdown_item_1line,
+            messagesToShow
+        )
+        val listViewItem = findViewById<ListView>(R.id.listViewTeacher)
+        val adapterCustom = MessageAdapter(context, arrayListMessage!!)
+        listViewItem.adapter = adapterCustom
+
+        listViewItem.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+
+                val clickedItem: MessageDTO = parent.getItemAtPosition(position) as MessageDTO
+
+                MaterialAlertDialogBuilder(context).apply {
+                    setTitle("Wiadomość: ${clickedItem.title}")
+                    setMessage("Wyświetlone przez: ${clickedItem.contents}")
+                    setPositiveButton("Potwierdź") { _, _ ->
+                    }
+                    setNeutralButton("Anuluj") { _, _ -> }
+                }.create().show()
+            }
     }
 }
